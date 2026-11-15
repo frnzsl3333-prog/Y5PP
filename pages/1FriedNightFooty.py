@@ -6,7 +6,7 @@ import pandas as pd
 import altair as alt
 
 # --- Page Title ---
-st.title("🏈 Fried Night Footy Match Simulator")
+st.title("🏈 Fried Night Footy")
 st.caption("A Year 5 Passion Project Game")
 
 # --- NRL Team List (Includes PNG Chiefs) ---
@@ -40,7 +40,7 @@ team2_options = [t for t in nrl_teams if t != team1]
 team2 = st.sidebar.selectbox("Away Team:", team2_options, index=0)
 
 # Game length setting
-sets_per_half = st.sidebar.slider("Number of Sets per Half:", 5, 20, 8)
+sets_per_half = st.sidebar.slider("Sets per game:", 5, 20, 8)
 
 # Kickoff Button
 start_button = st.sidebar.button("🏉 Start Match!")
