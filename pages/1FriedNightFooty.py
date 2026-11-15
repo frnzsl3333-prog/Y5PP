@@ -35,9 +35,9 @@ nrl_teams = [
 st.sidebar.header("Match Settings")
 
 # Dropdowns to pick Home and Away teams
-team1 = st.sidebar.selectbox("Home Team:", nrl_teams, index=0) # Defaults to PNG Chiefs
+team1 = st.sidebar.selectbox("Home Team:", nrl_teams, index=6) # Defaults to Parramatta Eels
 team2_options = [t for t in nrl_teams if t != team1]
-team2 = st.sidebar.selectbox("Away Team:", team2_options, index=0)
+team2 = st.sidebar.selectbox("Away Team:", team2_options, index=1)
 
 # Game length setting
 sets_per_half = st.sidebar.slider("Sets per game:", 5, 20, 8)
@@ -47,25 +47,33 @@ start_button = st.sidebar.button("🏉 Start Match!")
 
 # --- Main Scoreboard Area ---
 score_display = st.empty()
+commentary_display = st.empty()
+status_display = st.empty()
 
 if start_button:
     final_scores = {team1: 0, team2: 0}
     final_tries = {team1: 0, team2: 0}
+    final_conversions = {team1: 0, team2: 0}
+    final_field_goals = {team1: 0, team2: 0}
 
     def update_scoreboard(current_half, attacking_team, commentary):
         """Display the stadium scoreboard screen."""
+        period = "Full Time" if current_half == "FULL TIME" else f"Half {current_half}"
         scoreboard_html = f"""
         <div style='background-color:#003366; color:white; padding:20px; border-radius:12px; text-align:center;'>
-            <h3 style='margin:0; color:#ffd700;'>Friday Night Footy - Half {current_half}</h3>
+            <h3 style='margin:0; color:#ffd700;'>Friday Night Footy - {period}</h3>
             <h1 style='margin:10px 0; font-size:42px; color:#ffffff;'>
                 <b>{team1}: {final_scores[team1]}</b> &nbsp;|&nbsp; <b>{team2}: {final_scores[team2]}</b>
             </h1>
-            <p style='margin:0; font-size:18px; color:#a2d2ff;'>
-                <b>Attacking:</b> {attacking_team} | <b>Commentary:</b> {commentary}
-            </p>
         </div>
         """
         score_display.markdown(scoreboard_html, unsafe_allow_html=True)
+        commentary_html = f"""
+        <div style='background-color:#fff8dc; color:#222; padding:14px 18px; border-left:6px solid #e6a700; border-radius:8px; margin-top:10px; font-size:18px;'>
+            <b>Attacking: {attacking_team}</b><br>{commentary}
+        </div>
+        """
+        commentary_display.markdown(commentary_html, unsafe_allow_html=True)
 
     def play_half(half_num):
         """Simulate one half of play for both teams."""
@@ -79,9 +87,9 @@ if start_button:
             if event1 == "Try!":
                 pts1 = 4
                 commentary1 = f"TRY! {team1} cross the line! (+4)"
-                # Conversion attempt (+2 points)
                 if random.choice([True, False]):
                     pts1 += 2
+                    final_conversions[team1] += 1
                     commentary1 += " & Kicked Conversion! (+2)"
                 else:
                     commentary1 += " (Conversion missed)"
@@ -89,6 +97,7 @@ if start_button:
 
             elif event1 == "Field Goal":
                 pts1 = 1
+                final_field_goals[team1] += 1
                 commentary1 = f"FIELD GOAL! {team1} slots 1 point!"
 
             elif event1 == "Knock On":
@@ -113,6 +122,7 @@ if start_button:
                 commentary2 = f"TRY! {team2} score a great try! (+4)"
                 if random.choice([True, False]):
                     pts2 += 2
+                    final_conversions[team2] += 1
                     commentary2 += " & Kicked Conversion! (+2)"
                 else:
                     commentary2 += " (Conversion missed)"
@@ -120,6 +130,7 @@ if start_button:
 
             elif event2 == "Field Goal":
                 pts2 = 1
+                final_field_goals[team2] += 1
                 commentary2 = f"FIELD GOAL! {team2} scores 1 point!"
 
             elif event2 == "Knock On":
@@ -138,36 +149,80 @@ if start_button:
         return t1_history, t2_history
 
     # --- Run Match (2 Halves) ---
-    st.info("🔔 **First Half Kickoff!**")
+    status_display.info("🔔 **First Half Kickoff!**")
     t1_h1, t2_h1 = play_half(1)
 
-    st.info("⏸️ **Halftime Break!**")
+    status_display.info("⏸️ **Halftime Break!**")
     time.sleep(1)
 
-    st.info("🔔 **Second Half Kickoff!**")
+    status_display.info("🔔 **Second Half Kickoff!**")
     t1_h2, t2_h2 = play_half(2)
 
     # Combine total points history
     t1_all = t1_h1 + t1_h2
     t2_all = t2_h1 + t2_h2
 
-    update_scoreboard("FULL TIME", "Match Over", "Final Siren Has Blown!")
+    # --- WIPE LIVE CONTAINERS TO SAVE SPACE AT FULL TIME ---
+    score_display.empty()
+    commentary_display.empty()
+    status_display.empty()
+
+    # --- Side-by-Side Final Outcome Screen (Appears immediately at the top) ---
+    score_difference = abs(final_scores[team1] - final_scores[team2])
+    if final_scores[team1] > final_scores[team2]:
+        result = f"🏆 {team1} SMASHED {team2}! 🏆" if score_difference > 20 else f"🏆 {team1} WINS THE MATCH! 🏆"
+    elif final_scores[team2] > final_scores[team1]:
+        result = f"🏆 {team2} SMASHED {team1}! 🏆" if score_difference > 20 else f"🏆 {team2} WINS THE MATCH! 🏆"
+    else:
+        result = f"🤝 IT'S A TIE! GO TO THE TIEBREAKER PAGE! 🤝"
+
+    st.markdown(f"<h1 style='color:#38b000; text-align:center;'>{result}</h1>", unsafe_allow_html=True)
+    st.write("")
+
+    # Side-by-side team breakdown columns
+    col_team1, col_team2 = st.columns(2)
+
+    with col_team1:
+        st.markdown(f"### 🔵 {team1}")
+        if final_scores[team1] > final_scores[team2]:
+            st.success("🎉 MATCH WINNER")
+        elif final_scores[team1] < final_scores[team2]:
+            st.error("❌ RUNNER-UP")
+        else:
+            st.warning("🤝 DRAW")
+        
+        st.metric(label="Final Score", value=final_scores[team1])
+        st.write(f"* **Tries Scored:** {final_tries[team1]}")
+        st.write(f"* **Conversions:** {final_conversions[team1]}")
+        st.write(f"* **Field Goals:** {final_field_goals[team1]}")
+
+    with col_team2:
+        st.markdown(f"### 🔴 {team2}")
+        if final_scores[team2] > final_scores[team1]:
+            st.success("🎉 MATCH WINNER")
+        elif final_scores[team2] < final_scores[team1]:
+            st.error("❌ RUNNER-UP")
+        else:
+            st.warning("🤝 DRAW")
+
+        st.metric(label="Final Score", value=final_scores[team2])
+        st.write(f"* **Tries Scored:** {final_tries[team2]}")
+        st.write(f"* **Conversions:** {final_conversions[team2]}")
+        st.write(f"* **Field Goals:** {final_field_goals[team2]}")
+
     st.write("---")
 
-    # --- Match Results & Winner ---
-    if final_scores[team1] > final_scores[team2]:
-        st.markdown(f"<h1 style='color:#38b000; text-align:center;'>🏆 {team1} WINS THE MATCH! 🏆</h1>", unsafe_allow_html=True)
-    elif final_scores[team2] > final_scores[team1]:
-        st.markdown(f"<h1 style='color:#38b000; text-align:center;'>🏆 {team2} WINS THE MATCH! 🏆</h1>", unsafe_allow_html=True)
-    else:
-        st.markdown(f"<h1 style='color:#ffb703; text-align:center;'>🤝 IT'S A TIE! GO TO THE TIEBREAKER PAGE!</h1>", unsafe_allow_html=True)
-
-    # --- Summary Stats ---
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric(label=f"{team1} Final Score", value=final_scores[team1], delta=f"{final_tries[team1]} Tries")
-    with col2:
-        st.metric(label=f"{team2} Final Score", value=final_scores[team2], delta=f"{final_tries[team2]} Tries")
+    # --- Match Statistics Table ---
+    st.subheader("📋 Match Statistics")
+    stats = pd.DataFrame(
+        {
+            "Team": [team1, team2],
+            "Tries": [final_tries[team1], final_tries[team2]],
+            "Conversions": [final_conversions[team1], final_conversions[team2]],
+            "Field goals": [final_field_goals[team1], final_field_goals[team2]],
+        }
+    )
+    st.dataframe(stats, hide_index=True, use_container_width=True)
 
     # --- Line Graph: Score Progression ---
     st.subheader("📈 Score Progression Graph")
