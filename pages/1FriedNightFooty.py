@@ -1,10 +1,39 @@
 
+
 # --- Import required libraries ---
 import streamlit as st
 import random
 import time
 import pandas as pd
 import altair as alt
+from pathlib import Path
+import base64
+
+# --- Page Background ---
+script_folder = Path(__file__).resolve().parent
+image_candidates = [script_folder / "NRL.jpg", script_folder.parent / "NRL.jpg"]
+background_image = next((path for path in image_candidates if path.exists()), None)
+
+if background_image:
+    image_data = base64.b64encode(background_image.read_bytes()).decode()
+    st.markdown(
+        f"""
+        <style>
+        [data-stale="true"] {{
+            display: none !important;
+        }}
+        .stApp {{
+            background-image: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
+                              url("data:image/jpeg;base64,{image_data}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # --- Page Title ---
 st.title("🏈 Fried Night Footy")
@@ -43,15 +72,14 @@ team2 = st.sidebar.selectbox("Away Team:", team2_options, index=1)
 # Game length setting
 sets_per_half = st.sidebar.slider("Sets per game:", 5, 20, 8)
 
-# Kickoff Button
-start_button = st.sidebar.button("🏉 Start Match!")
+# Start a fresh match on the button's rerun.
+if st.sidebar.button("🏉 Start Match!"):
 
-# --- Main Scoreboard Area ---
-score_display = st.empty()
-commentary_display = st.empty()
-status_display = st.empty()
+    # --- Main Scoreboard Area ---
+    score_display = st.empty()
+    commentary_display = st.empty()
+    status_display = st.empty()
 
-if start_button:
     final_scores = {team1: 0, team2: 0}
     final_tries = {team1: 0, team2: 0}
     final_conversions = {team1: 0, team2: 0}
@@ -186,9 +214,9 @@ if start_button:
     with col_team1:
         st.markdown(f"### 🔵 {team1}")
         if final_scores[team1] > final_scores[team2]:
-            st.success("🎉 MATCH WINNER")
+            st.success("🏆 MATCH WINNER")
         elif final_scores[team1] < final_scores[team2]:
-            st.error("❌ RUNNER-UP")
+            st.error("🏅 RUNNER-UP")
         else:
             st.warning("🤝 DRAW")
         
@@ -200,9 +228,9 @@ if start_button:
     with col_team2:
         st.markdown(f"### 🔴 {team2}")
         if final_scores[team2] > final_scores[team1]:
-            st.success("🎉 MATCH WINNER")
+            st.success("🏆 MATCH WINNER")
         elif final_scores[team2] < final_scores[team1]:
-            st.error("❌ RUNNER-UP")
+            st.error("🏅 RUNNER-UP")
         else:
             st.warning("🤝 DRAW")
 
