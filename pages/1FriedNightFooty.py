@@ -23,7 +23,7 @@ if background_image:
             display: none !important;
         }}
         .stApp {{
-            background-image: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
+            background-image: linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)),
                               url("data:image/jpeg;base64,{image_data}");
             background-size: cover;
             background-position: center;
@@ -36,6 +36,26 @@ if background_image:
     )
 
 # --- Page Title ---
+
+st.markdown(
+    """
+    <style>
+    h1 {
+        color: #ffd700 !important;
+        font-size: 3.5rem !important;
+        text-shadow: 2px 2px 5px #003366;
+    }
+    [data-testid="stCaptionContainer"] p {
+        color: #ffffff !important;
+        font-size: 1.4rem !important;
+        font-weight: 700;
+        text-shadow: 1px 1px 4px #003366;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("🏈 Fried Night Footy")
 st.caption("A Year 5 Passion Project Game")
 
@@ -205,10 +225,36 @@ if st.sidebar.button("🏉 Start Match!"):
     else:
         result = f"🤝 IT'S A TIE! GO TO THE TIEBREAKER PAGE! 🤝"
 
-    st.markdown(f"<h1 style='color:#38b000; text-align:center;'>{result}</h1>", unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div style='background-color:#003366; padding:16px 20px; border-radius:12px; margin:12px 0; text-align:center;'>
+            <h1 style='color:#ffd700; margin:0; text-shadow:1px 1px 3px #001a33;'>{result}</h1>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.write("")
 
     # Side-by-side team breakdown columns
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+            background-color: rgba(255, 255, 255, 0.97);
+            border: 2px solid #003366;
+            border-radius: 12px;
+            padding: 18px;
+        }
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] h3,
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMetricLabel"],
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMetricValue"] {
+            color: #102a43 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     col_team1, col_team2 = st.columns(2)
 
     with col_team1:
@@ -265,6 +311,6 @@ if st.sidebar.button("🏉 Start Match!"):
         y=alt.Y('Score:Q', title='Total Points'),
         color=alt.Color('Team', scale=alt.Scale(domain=[team1, team2], range=['#0077b6', '#d62828'])),
         tooltip=['Set Number', 'Score', 'Team']
-    ).interactive()
+    )
 
     st.altair_chart(line_chart, use_container_width=True)

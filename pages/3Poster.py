@@ -17,7 +17,7 @@ st.title("Game Poster")
 # --- Load and Display Poster Image ---
 # Image should be in your repo folder: 'images/poster.png'
 current_dir = os.path.dirname(__file__)
-image_path = os.path.join(current_dir, "..", "images", "Poster.png")  # Relative path from pages folder
+image_path = os.path.join(current_dir, "..",  "Poster.png")  # Relative path from pages folder
 
 try:
     poster = Image.open(image_path)
