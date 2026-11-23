@@ -41,7 +41,7 @@ st.markdown(
     """
     <style>
     h1 {
-        color: #ffd700 !important;
+        color: #000000 !important;
         font-size: 3.5rem !important;
         text-shadow: 2px 2px 5px #003366;
     }
@@ -111,10 +111,11 @@ if st.sidebar.button("🏉 Start Match!"):
     def update_scoreboard(current_half, attacking_team, commentary):
         """Display the stadium scoreboard screen."""
         period = "Full Time" if current_half == "FULL TIME" else f"Half {current_half}"
+        
         scoreboard_html = f"""
-        <div style='background-color:#003366; color:white; padding:20px; border-radius:12px; text-align:center;'>
-            <h3 style='margin:0; color:#ffd700;'>Friday Night Footy - {period}</h3>
-            <h1 style='margin:10px 0; font-size:42px; color:#ffffff;'>
+        <div style='background-color:#004e7a; color:white; padding:20px; border-radius:12px; text-align:center;'>
+            <h3 style='margin:0; font-size:42px; color:#ffffff !important;'>Friday Night Footy - {period}</h3>
+            <h1 style='margin:10px 0; font-size:42px; color:#000000;'>
                 <b>{team1}: {final_scores[team1]}</b> &nbsp;|&nbsp; <b>{team2}: {final_scores[team2]}</b>
             </h1>
         </div>
@@ -230,8 +231,8 @@ if st.sidebar.button("🏉 Start Match!"):
 
     st.markdown(
         f"""
-        <div style='background-color:#003366; padding:16px 20px; border-radius:12px; margin:12px 0; text-align:center;'>
-            <h1 style='color:#ffd700; margin:0; text-shadow:1px 1px 3px #001a33;'>{result}</h1>
+        <div style='background-color:#004e7a; padding:16px 20px; border-radius:12px; margin:12px 0; text-align:center;'>
+            <h1 style='color:#ffffff; margin:0; text-shadow:1px 1px 3px #001a33;'>{result}</h1>
         </div>
         """,
         unsafe_allow_html=True,
