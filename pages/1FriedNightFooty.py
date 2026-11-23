@@ -46,10 +46,13 @@ st.markdown(
         text-shadow: 2px 2px 5px #003366;
     }
     [data-testid="stCaptionContainer"] p {
-        color: #ffffff !important;
+        color: #003366 !important;
         font-size: 1.4rem !important;
         font-weight: 700;
-        text-shadow: 1px 1px 4px #003366;
+        text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
+    }
+    h3 {
+        color: #003366 !important;
     }
     </style>
     """,
@@ -241,15 +244,42 @@ if st.sidebar.button("🏉 Start Match!"):
         <style>
         div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
             background-color: rgba(255, 255, 255, 0.97);
-            border: 2px solid #003366;
-            border-radius: 12px;
-            padding: 18px;
+            border: 3px solid #003366;
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 4px 10px rgba(0, 51, 102, 0.18);
         }
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] h3,
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMetricLabel"],
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMetricValue"] {
-            color: #102a43 !important;
+        .fnf-team-name {
+            background: #003366;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 12px 10px;
+            margin: 0 0 12px 0;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .fnf-stats {
+            background: #fff8dc;
+            border: 2px solid #d59e00;
+            border-radius: 10px;
+            color: #102a43;
+            padding: 14px;
+            margin-top: 10px;
+        }
+        .fnf-final-score {
+            color: #003366;
+            font-size: 38px;
+            font-weight: 900;
+            text-align: center;
+            margin: 8px 0;
+        }
+        .fnf-stat-line {
+            color: #102a43;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 5px 0;
         }
         </style>
         """,
@@ -258,21 +288,29 @@ if st.sidebar.button("🏉 Start Match!"):
     col_team1, col_team2 = st.columns(2)
 
     with col_team1:
-        st.markdown(f"### 🔵 {team1}")
+        st.markdown(f"<div class='fnf-team-name'>🔵 {team1}</div>", unsafe_allow_html=True)
         if final_scores[team1] > final_scores[team2]:
             st.success("🏆 MATCH WINNER")
         elif final_scores[team1] < final_scores[team2]:
             st.error("🏅 RUNNER-UP")
         else:
             st.warning("🤝 DRAW")
-        
-        st.metric(label="Final Score", value=final_scores[team1])
-        st.write(f"* **Tries Scored:** {final_tries[team1]}")
-        st.write(f"* **Conversions:** {final_conversions[team1]}")
-        st.write(f"* **Field Goals:** {final_field_goals[team1]}")
+
+        st.markdown(
+            f"""
+            <div class='fnf-stats'>
+                <div style='text-align:center; font-size:16px; font-weight:700; color:#003366;'>FINAL SCORE</div>
+                <div class='fnf-final-score'>{final_scores[team1]}</div>
+                <div class='fnf-stat-line'>🏉 Tries Scored: {final_tries[team1]}</div>
+                <div class='fnf-stat-line'>🎯 Conversions: {final_conversions[team1]}</div>
+                <div class='fnf-stat-line'>⚽ Field Goals: {final_field_goals[team1]}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with col_team2:
-        st.markdown(f"### 🔴 {team2}")
+        st.markdown(f"<div class='fnf-team-name'>🔴 {team2}</div>", unsafe_allow_html=True)
         if final_scores[team2] > final_scores[team1]:
             st.success("🏆 MATCH WINNER")
         elif final_scores[team2] < final_scores[team1]:
@@ -280,10 +318,18 @@ if st.sidebar.button("🏉 Start Match!"):
         else:
             st.warning("🤝 DRAW")
 
-        st.metric(label="Final Score", value=final_scores[team2])
-        st.write(f"* **Tries Scored:** {final_tries[team2]}")
-        st.write(f"* **Conversions:** {final_conversions[team2]}")
-        st.write(f"* **Field Goals:** {final_field_goals[team2]}")
+        st.markdown(
+            f"""
+            <div class='fnf-stats'>
+                <div style='text-align:center; font-size:16px; font-weight:700; color:#003366;'>FINAL SCORE</div>
+                <div class='fnf-final-score'>{final_scores[team2]}</div>
+                <div class='fnf-stat-line'>🏉 Tries Scored: {final_tries[team2]}</div>
+                <div class='fnf-stat-line'>🎯 Conversions: {final_conversions[team2]}</div>
+                <div class='fnf-stat-line'>⚽ Field Goals: {final_field_goals[team2]}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     st.write("---")
 
