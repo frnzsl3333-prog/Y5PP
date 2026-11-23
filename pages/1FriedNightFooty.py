@@ -113,13 +113,15 @@ if st.sidebar.button("🏉 Start Match!"):
         period = "Full Time" if current_half == "FULL TIME" else f"Half {current_half}"
         
         scoreboard_html = f"""
-        <div style='background-color:#004e7a; color:white; padding:20px; border-radius:12px; text-align:center;'>
-            <h3 style='margin:0; font-size:42px; color:#ffffff !important;'>Friday Night Footy - {period}</h3>
-            <h1 style='margin:10px 0; font-size:42px; color:#000000;'>
-                <b>{team1}: {final_scores[team1]}</b> &nbsp;|&nbsp; <b>{team2}: {final_scores[team2]}</b>
-            </h1>
-        </div>
-        """
+<div style='background-color:#004e7a; color:#ffffff; -webkit-text-fill-color:#ffffff; padding:20px; border-radius:12px; text-align:center;'>
+    <div style='margin:0; font-size:42px; font-weight:600; color:#ffffff !important; -webkit-text-fill-color:#ffffff !important;'>
+        Friday Night Footy - {period}
+    </div>
+    <h1 style='margin:10px 0; font-size:42px; color:#000000; -webkit-text-fill-color:#000000;'>
+        <b>{team1}: {final_scores[team1]}</b> &nbsp;|&nbsp; <b>{team2}: {final_scores[team2]}</b>
+    </h1>
+</div>
+"""
         score_display.markdown(scoreboard_html, unsafe_allow_html=True)
         commentary_html = f"""
         <div style='background-color:#fff8dc; color:#222; padding:14px 18px; border-left:6px solid #e6a700; border-radius:8px; margin-top:10px; font-size:18px;'>

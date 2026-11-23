@@ -78,13 +78,24 @@ if kick_off:
     goal_chances = {"Friendly": 0.22, "World Cup": 0.18, "Legend": 0.28}
     goal_chance = goal_chances[match_mode]
     commentary = [
-        "Lovely passing across the pitch! 🤝",
-        "What a speedy counter-attack! 💨",
-        "A brilliant save by the goalkeeper! 🧤",
-        "The crowd is cheering so loudly! 📣",
-        "A clever little trick gets past a defender! ✨",
-        "The shot goes just wide—so close! 😮",
-        "A corner kick swings into the box! 🌀",
+        "A composed passing move builds through midfield.",
+        "A quick counter-attack puts the defence under pressure.",
+        "The goalkeeper makes an excellent reaction save.",
+        "The crowd responds as the tempo rises.",
+        "A well-timed dribble creates space in the final third.",
+        "The effort narrowly misses the target.",
+        "The delivery from the corner causes a dangerous moment.",
+        "A sharp one-two opens up a path toward goal.",
+        "The midfielder switches play with a precise long pass.",
+        "A defender steps in to make a timely interception.",
+        "The winger cuts inside and tests the defence.",
+        "A clever through ball sends a runner into space.",
+        "The back line holds firm under pressure.",
+        "A free kick finds its way into the penalty area.",
+        "Both sides battle for control in the middle of the pitch.",
+        "The keeper claims the cross confidently.",
+        "A late run gives the attack another option.",
+        "The referee signals advantage as play continues.",
     ]
 
     st.markdown(f"Your team: **{fifa_teams[supported_team]} {supported_team}**")
