@@ -117,7 +117,7 @@ if st.sidebar.button("🏉 Start Match!"):
     <div style='margin:0; font-size:42px; font-weight:600; color:#ffffff !important; -webkit-text-fill-color:#ffffff !important;'>
         Friday Night Footy - {period}
     </div>
-    <h1 style='margin:10px 0; font-size:42px; color:#000000; -webkit-text-fill-color:#000000;'>
+    <h1 style='margin:10px 0; font-size:42px; color:#ffffff; -webkit-text-fill-color:#ffffff;'>
         <b>{team1}: {final_scores[team1]}</b> &nbsp;|&nbsp; <b>{team2}: {final_scores[team2]}</b>
     </h1>
 </div>
@@ -234,7 +234,7 @@ if st.sidebar.button("🏉 Start Match!"):
     st.markdown(
         f"""
         <div style='background-color:#004e7a; padding:16px 20px; border-radius:12px; margin:12px 0; text-align:center;'>
-            <h1 style='color:#ffffff; margin:0; text-shadow:1px 1px 3px #001a33;'>{result}</h1>
+            <h1 style='color:#ffffff; -webkit-text-fill-color:#ffffff; margin:0; text-shadow:1px 1px 3px #001a33;'>{result}</h1>
         </div>
         """,
         unsafe_allow_html=True,
@@ -291,11 +291,12 @@ if st.sidebar.button("🏉 Start Match!"):
     col_team1, col_team2 = st.columns(2)
 
     with col_team1:
-        st.markdown(f"<div class='fnf-team-name'>🔵 {team1}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='fnf-team-name'> {team1}</div>", unsafe_allow_html=True)
         if final_scores[team1] > final_scores[team2]:
-            st.success("🏆 MATCH WINNER")
+            
+            st.markdown("<div style='background:#28a745; color:#ffffff; border-radius:8px; padding:10px; font-size:26px; font-weight:800; text-align:center;'>🏆 MATCH WINNER</div>", unsafe_allow_html=True)
         elif final_scores[team1] < final_scores[team2]:
-            st.error("🏅 RUNNER-UP")
+            st.markdown("<div style='background:#dc3545; color:#ffffff; border-radius:8px; padding:10px; font-size:26px; font-weight:800; text-align:center;'>🏅 RUNNER-UP</div>", unsafe_allow_html=True)
         else:
             st.warning("🤝 DRAW")
 
@@ -313,11 +314,11 @@ if st.sidebar.button("🏉 Start Match!"):
         )
 
     with col_team2:
-        st.markdown(f"<div class='fnf-team-name'>🔴 {team2}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='fnf-team-name'> {team2}</div>", unsafe_allow_html=True)
         if final_scores[team2] > final_scores[team1]:
-            st.success("🏆 MATCH WINNER")
+            st.markdown("<div style='background:#28a745; color:#ffffff; border-radius:8px; padding:10px; font-size:26px; font-weight:800; text-align:center;'>🏆 MATCH WINNER</div>", unsafe_allow_html=True)
         elif final_scores[team2] < final_scores[team1]:
-            st.error("🏅 RUNNER-UP")
+            st.markdown("<div style='background:#dc3545; color:#ffffff; border-radius:8px; padding:10px; font-size:26px; font-weight:800; text-align:center;'>🏅 RUNNER-UP</div>", unsafe_allow_html=True)
         else:
             st.warning("🤝 DRAW")
 
@@ -358,7 +359,7 @@ if st.sidebar.button("🏉 Start Match!"):
     line_chart = alt.Chart(df).mark_line(point=True).encode(
         x=alt.X('Set Number:O', title='Attack Set Number'),
         y=alt.Y('Score:Q', title='Total Points'),
-        color=alt.Color('Team', scale=alt.Scale(domain=[team1, team2], range=['#0077b6', '#d62828'])),
+        color=alt.Color('Team', scale=alt.Scale(domain=[team1, team2], range=['#0077b6', "#dfa00c"])),
         tooltip=['Set Number', 'Score', 'Team']
     )
 
