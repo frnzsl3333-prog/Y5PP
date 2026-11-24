@@ -361,6 +361,6 @@ if st.sidebar.button("🏉 Start Match!"):
         y=alt.Y('Score:Q', title='Total Points'),
         color=alt.Color('Team', scale=alt.Scale(domain=[team1, team2], range=['#0077b6', "#dfa00c"])),
         tooltip=['Set Number', 'Score', 'Team']
-    )
+    ).interactive()
 
     st.altair_chart(line_chart, use_container_width=True)
